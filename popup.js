@@ -1,20 +1,19 @@
-function sendSpeed(speed: number): void {
+function sendSpeed(speed) {
   chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
     const tab = tabs[0];
-    if (!tab?.id) return;
+    if (!tab || !tab.id) return;
 
-    chrome.tabs.sendMessage(tab.id, { action: 'setSpeed', speed }, (response) => {
+    chrome.tabs.sendMessage(tab.id, { action: 'setSpeed', speed }, (_response) => {
       if (chrome.runtime.lastError) {
         showError('Cannot access this page. Try refreshing.');
-        return;
       }
-      // Toast notification is handled by content.js
+      // Toast is handled by content.js
     });
   });
 }
 
-function showError(msg: string): void {
-  const el = document.getElementById('error-msg')!;
+function showError(msg) {
+  const el = document.getElementById('error-msg');
   el.textContent = msg;
   el.style.display = 'block';
   setTimeout(() => {
@@ -24,13 +23,13 @@ function showError(msg: string): void {
 
 document.querySelectorAll('.speed-btn').forEach((btn) => {
   btn.addEventListener('click', () => {
-    const speed = parseFloat((btn as HTMLElement).dataset.speed!);
+    const speed = parseFloat(btn.dataset.speed);
     sendSpeed(speed);
   });
 });
 
-document.getElementById('apply-custom')!.addEventListener('click', () => {
-  const input = document.getElementById('custom-speed') as HTMLInputElement;
+document.getElementById('apply-custom').addEventListener('click', () => {
+  const input = document.getElementById('custom-speed');
   const raw = input.value.trim();
 
   if (!raw) {
@@ -49,8 +48,8 @@ document.getElementById('apply-custom')!.addEventListener('click', () => {
   input.value = '';
 });
 
-document.getElementById('custom-speed')!.addEventListener('keydown', (e) => {
+document.getElementById('custom-speed').addEventListener('keydown', (e) => {
   if (e.key === 'Enter') {
-    document.getElementById('apply-custom')!.click();
+    document.getElementById('apply-custom').click();
   }
 });

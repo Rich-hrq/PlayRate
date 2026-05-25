@@ -1,7 +1,7 @@
-let currentSpeed: number | null = null;
+let currentSpeed = null;
 
-function findPlayingVideo(): HTMLVideoElement | null {
-  const videos = document.querySelectorAll<HTMLVideoElement>('video');
+function findPlayingVideo() {
+  const videos = document.querySelectorAll('video');
 
   for (const video of videos) {
     if (!video.paused && video.currentTime > 0 && video.readyState >= 2) {
@@ -18,7 +18,7 @@ function findPlayingVideo(): HTMLVideoElement | null {
   return videos.length > 0 ? videos[0] : null;
 }
 
-function showToast(message: string, type: 'success' | 'error'): void {
+function showToast(message, type) {
   const existing = document.querySelector('.playrate-toast');
   if (existing) existing.remove();
 
@@ -52,7 +52,7 @@ function showToast(message: string, type: 'success' | 'error'): void {
   }, 2000);
 }
 
-function applySpeed(speed: number): boolean {
+function applySpeed(speed) {
   const video = findPlayingVideo();
 
   if (!video) {
@@ -62,10 +62,10 @@ function applySpeed(speed: number): boolean {
 
   try {
     video.playbackRate = speed;
-    showToast(`Speed set to ${speed}x`, 'success');
+    showToast('Speed set to ' + speed + 'x', 'success');
     currentSpeed = speed;
     return true;
-  } catch {
+  } catch (_) {
     showToast('Failed to set playback speed', 'error');
     return false;
   }
@@ -81,7 +81,7 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
 const observer = new MutationObserver(() => {
   if (currentSpeed === null) return;
 
-  const videos = document.querySelectorAll<HTMLVideoElement>('video');
+  const videos = document.querySelectorAll('video');
   for (const video of videos) {
     if (!video.paused && video.playbackRate !== currentSpeed) {
       video.playbackRate = currentSpeed;
