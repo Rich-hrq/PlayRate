@@ -1,0 +1,119 @@
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  width: 240px;
+  font-family: system-ui, -apple-system, sans-serif;
+  background: #1e1e2e;
+  color: #cdd6f4;
+}
+
+.container {
+  padding: 16px;
+}
+
+.title {
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 14px;
+  color: #cba6f7;
+  letter-spacing: -0.3px;
+}
+
+.presets {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.speed-btn {
+  padding: 10px 0;
+  border: none;
+  border-radius: 8px;
+  background: #313244;
+  color: #cdd6f4;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.12s;
+  text-align: center;
+}
+
+.speed-btn:hover {
+  background: #45475a;
+}
+
+.speed-btn:active {
+  background: #585b70;
+}
+
+.divider {
+  height: 1px;
+  background: #313244;
+  margin: 0 0 12px 0;
+}
+
+.custom {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+#custom-speed {
+  flex: 1;
+  padding: 8px 10px;
+  border: 1px solid #45475a;
+  border-radius: 6px;
+  background: #313244;
+  color: #cdd6f4;
+  font-size: 13px;
+  outline: none;
+  transition: border-color 0.12s;
+}
+
+#custom-speed::placeholder {
+  color: #6c7086;
+}
+
+#custom-speed:focus {
+  border-color: #cba6f7;
+}
+
+/* hide number input spinners for a cleaner look */
+#custom-speed::-webkit-inner-spin-button,
+#custom-speed::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+#apply-custom {
+  padding: 8px 14px;
+  border: none;
+  border-radius: 6px;
+  background: #cba6f7;
+  color: #1e1e2e;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.12s;
+  white-space: nowrap;
+}
+
+#apply-custom:hover {
+  background: #b4befe;
+}
+
+#error-msg {
+  display: none;
+  color: #f38ba8;
+  font-size: 12px;
+  margin-top: 10px;
+  text-align: center;
+  line-height: 1.4;
+}
