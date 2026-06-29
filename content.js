@@ -64,6 +64,7 @@ function applySpeed(speed) {
     video.playbackRate = speed;
     showToast('Speed set to ' + speed + 'x', 'success');
     currentSpeed = speed;
+    watchVideoRateChange(video);
     return true;
   } catch (_) {
     showToast('Failed to set playback speed', 'error');
@@ -78,13 +79,38 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
   }
 });
 
-const observer = new MutationObserver(() => {
+function applySpeedToVideo(video, speed) {
+  if (video.playbackRate !== speed) {
+    video.playbackRate = speed;
+  }
+}
+
+function watchVideoRateChange(video) {
+  if (video.dataset.playrateWatching) return;
+  video.dataset.playrateWatching = 'true';
+  video.addEventListener('ratechange', () => {
+    if (currentSpeed !== null && video.playbackRate !== currentSpeed) {
+      currentSpeed = video.playbackRate;
+    }
+  });
+}
+
+const observer = new MutationObserver((mutations) => {
   if (currentSpeed === null) return;
 
-  const videos = document.querySelectorAll('video');
-  for (const video of videos) {
-    if (!video.paused && video.playbackRate !== currentSpeed) {
-      video.playbackRate = currentSpeed;
+  for (const mutation of mutations) {
+    for (const node of mutation.addedNodes) {
+      if (node.nodeType !== Node.ELEMENT_NODE) continue;
+
+      if (node.tagName === 'VIDEO') {
+        applySpeedToVideo(node, currentSpeed);
+        watchVideoRateChange(node);
+      }
+
+      for (const video of node.querySelectorAll?.('video') ?? []) {
+        applySpeedToVideo(video, currentSpeed);
+        watchVideoRateChange(video);
+      }
     }
   }
 });
